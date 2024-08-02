@@ -1,7 +1,5 @@
-package cz.mcity.pashop.repository;
+package cz.mcity.pashop.model;
 
-import cz.mcity.pashop.model.Orders;
-import cz.mcity.pashop.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
