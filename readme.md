@@ -2,3 +2,5 @@ Projekt používá postgresql db, očekává lokálně docker, přes docker-comp
 DB je verzována via liquibase, chtěl jsem si to vyzkoušet....
 
 K datům přistupuji přes JPA
+    ** mám model    
+    ** mám interface (repository)
