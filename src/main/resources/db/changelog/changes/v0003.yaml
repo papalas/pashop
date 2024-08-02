@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1722634227305-1
+      author: tomas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addNotNullConstraint:
+            columnDataType: DATETIME
+            columnName: created_at
+            tableName: users
+            validate: true
+
