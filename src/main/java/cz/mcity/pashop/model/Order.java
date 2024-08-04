@@ -8,14 +8,14 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
-public class Orders {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
+    private User user;
 
     @Column(name = "order_date")
     private LocalDateTime orderDate;
@@ -27,7 +27,7 @@ public class Orders {
     private String status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItems> orderItems = new ArrayList<>();
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     // Getters and setters
 }

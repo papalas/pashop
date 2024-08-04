@@ -1,7 +1,7 @@
 package cz.mcity.pashop.controller;
 
-import cz.mcity.pashop.model.Users;
-import cz.mcity.pashop.model.UsersRepository;
+import cz.mcity.pashop.model.User;
+import cz.mcity.pashop.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UsersRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users user = userRepository.findByUsername(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         return org.springframework.security.core.userdetails.User

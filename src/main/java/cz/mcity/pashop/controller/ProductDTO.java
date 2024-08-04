@@ -1,15 +1,15 @@
 package cz.mcity.pashop.controller;
 
-import cz.mcity.pashop.model.Products;
+import cz.mcity.pashop.model.Product;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
- * DTO for {@link Products}
+ * DTO for {@link Product}
  */
-public class ProductsDto implements Serializable {
+public class ProductDTO implements Serializable {
     private final Integer id;
     private final String name;
     private final String description;
@@ -17,7 +17,7 @@ public class ProductsDto implements Serializable {
     private final Integer stockQuantity;
     private final String altDesc;
 
-    public ProductsDto(Integer id, String name, String description, BigDecimal price, Integer stockQuantity, String altDesc) {
+    public ProductDTO(Integer id, String name, String description, BigDecimal price, Integer stockQuantity, String altDesc) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -54,7 +54,7 @@ public class ProductsDto implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductsDto entity = (ProductsDto) o;
+        ProductDTO entity = (ProductDTO) o;
         return Objects.equals(this.id, entity.id) &&
                 Objects.equals(this.name, entity.name) &&
                 Objects.equals(this.description, entity.description) &&
