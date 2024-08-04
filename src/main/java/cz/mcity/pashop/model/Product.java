@@ -1,6 +1,7 @@
 package cz.mcity.pashop.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 
@@ -23,6 +24,10 @@ public class Product {
 
     @Column(name = "stock_quantity", nullable = false)
     private Integer stockQuantity;
+
+    @ColumnDefault("3")
+    @Column(name = "delivery_days", nullable = false)
+    private Integer deliveryDays;
 
     @Column
     private String altDesc;
@@ -65,6 +70,14 @@ public class Product {
 
     public void setStockQuantity(int stockQuantity) {
         this.stockQuantity = stockQuantity;
+    }
+
+    public Integer getDeliveryDays() {
+        return deliveryDays;
+    }
+
+    public void setDeliveryDays(Integer deliveryDays) {
+        this.deliveryDays = deliveryDays;
     }
 
 

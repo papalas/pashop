@@ -51,7 +51,8 @@ public class ProductService {
                 product.getDescription(),
                 product.getPrice(),
                 product.getStockQuantity(),
-                product.getAltDesc());
+                product.getAltDesc(),
+                product.getDeliveryDays());
     }
 
 }
