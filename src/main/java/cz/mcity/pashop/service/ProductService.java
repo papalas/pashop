@@ -10,16 +10,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
 @Service
 public class ProductService {
-    private final ProductRepository productsRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
     public  ProductService(ProductRepository productsRepository) {
-        this.productsRepository = productsRepository;
+        this.productRepository = productsRepository;
+    }
+
+    public Optional<ProductDTO> getProductById(Long id) {
+        return productRepository.findById(id)
+                .map(ProductDTO::fromEntity);
     }
 
 
@@ -27,16 +33,16 @@ public class ProductService {
         Page<Product> productPage;
 
         if (search != null && !search.isEmpty()) {
-            productPage =  productsRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(search,search, pageable);
+            productPage =  productRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(search,search, pageable);
         } else {
-            productPage=  productsRepository.findAll(pageable);
+            productPage=  productRepository.findAll(pageable);
         }
 
         List<ProductDTO> productDTOs = productPage.getContent().stream()
-                .map(this::convertToDTO)
+                .map(ProductDTO::fromEntity)
                 .collect(Collectors.toList());
 
-        return new PageDTO<ProductDTO>(
+        return new PageDTO<>(
                 productDTOs,
                 productPage.getNumber(),
                 productPage.getSize(),
@@ -45,14 +51,5 @@ public class ProductService {
         );
     }
 
-    private ProductDTO convertToDTO(Product product) {
-        return new ProductDTO(product.getId(),
-                product.getName(),
-                product.getDescription(),
-                product.getPrice(),
-                product.getStockQuantity(),
-                product.getAltDesc(),
-                product.getDeliveryDays());
-    }
 
 }
