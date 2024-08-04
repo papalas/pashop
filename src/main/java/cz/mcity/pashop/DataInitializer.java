@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -49,7 +50,6 @@ public class DataInitializer {
 
     private void createMockProducts() {
         List<String> categories = Arrays.asList("Electronics", "Clothing", "Books", "Home & Garden", "Toys");
-        List<String> brands = Arrays.asList("TechCo", "FashionBrand", "BookPublisher", "HomeMakers", "ToyWonders");
 
         for (int i = 0; i < 100; i++) {
             Product product = new Product();
@@ -80,7 +80,7 @@ public class DataInitializer {
     }
 
     private BigDecimal generatePrice() {
-        return BigDecimal.valueOf(10 + (1000 - 10) * random.nextDouble()).setScale(2, BigDecimal.ROUND_HALF_UP);
+        return BigDecimal.valueOf(10 + (1000 - 10) * random.nextDouble()).setScale(2, RoundingMode.HALF_UP);
     }
 
 
