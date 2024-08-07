@@ -8,7 +8,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: SERIAL
+                  type: BIGSERIAL
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -36,7 +36,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: SERIAL
+                  type: BIGSERIAL
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -67,13 +67,13 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: SERIAL
+                  type: BIGSERIAL
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: user_id
-                  type: INT
+                  type: BIGINT
                   constraints:
                     nullable: false
               - column:
@@ -82,7 +82,7 @@ databaseChangeLog:
                   defaultValueComputed: CURRENT_TIMESTAMP
               - column:
                   name: total_amount
-                  type: DECIMAL(10, 2)
+                  type: DECIMAL
                   constraints:
                     nullable: false
               - column:
@@ -96,18 +96,18 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: SERIAL
+                  type: BIGSERIAL
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: order_id
-                  type: INT
+                  type: BIGINT
                   constraints:
                     nullable: false
               - column:
                   name: product_id
-                  type: INT
+                  type: BIGINT
                   constraints:
                     nullable: false
               - column:
@@ -117,7 +117,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: price_at_time
-                  type: DECIMAL(10, 2)
+                  type: DECIMAL
                   constraints:
                     nullable: false
 

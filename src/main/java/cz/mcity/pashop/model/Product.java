@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -29,10 +29,7 @@ public class Product {
     @Column(name = "delivery_days", nullable = false)
     private Integer deliveryDays;
 
-    @Column
-    private String altDesc;
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -48,9 +45,6 @@ public class Product {
         return description;
     }
 
-    public String getAltDesc() {
-        return altDesc;
-    }
 
     public Integer getStockQuantity() {
         return stockQuantity;

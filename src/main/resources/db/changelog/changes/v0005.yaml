@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1723066110066-1
+      author: tomas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  defaultValueNumeric: !!float '0'
+                  name: days_to_deliver
+                  type: INT
+            tableName: orders
+  - changeSet:
+      id: 1723066110066-2
+      author: tomas
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addNotNullConstraint:
+            columnName: days_to_deliver
+            tableName: orders
+

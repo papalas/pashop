@@ -33,14 +33,27 @@ používá paging JPA, @RequestParam, search by description a by name, search qu
 asi by se lehce dalo udělat order by, vytvořen Generic PageDTO interface
 pro individuální položku @PathVariable
 
+# Logika objednávek:
+Objednávky jsou uloženy v tabulce orders, objednávka má tři možné stavy: BASKET, ORDERED, DELIVERED, dále má odpočet days of delivery, podle kterého měním stav z ORDERED na DELIVERED.
+Skladová dostupnost se finálně počítá až při objednávání, přidání do košíku ještě není závazné. Vůbec je logika eshopu hodně zjednodušená, chápu úkol jako intro to spring boot.
+Order_items- obsahuje list položek.
+
+# Api AddItemToBasket
+vše podle přihlášeného usera...najdu nebo vytvořím košík, potom v košíku najdu nebo vyrobím položku a přičtu objednávaný počet. přepočítám total položky a uložím
+ošetřená logika v try bloku, pokud nenajde usera nebo produkt, vrátí http chybu
+
+# Api RemoveItemFromBasket
+Logika pokud je víc produktů k remove než je v koši? Zatím maže
+
 
 
 # TODOS::
 
+# Api ListBasket
+
+# API pay basket
+
+# List orders
+
 # background 1 minute task
-
-pak se pustit do api...
-
-
-
 

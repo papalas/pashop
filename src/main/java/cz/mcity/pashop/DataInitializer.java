@@ -57,6 +57,7 @@ public class DataInitializer {
             product.setDescription(generateDescription());
             product.setPrice(generatePrice());
             product.setStockQuantity(random.nextInt(1000));
+            product.setDeliveryDays(random.nextInt(10));
 
             productsRepository.save(product);
         }
