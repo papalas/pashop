@@ -1,12 +1,14 @@
 package cz.mcity.pashop.service;
 
 import cz.mcity.pashop.controller.OrderDto;
+import cz.mcity.pashop.exception.BasketEmptyException;
 import cz.mcity.pashop.exception.ProductNotFoundException;
 import cz.mcity.pashop.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -108,5 +110,14 @@ public class OrderService {
                 .stream()
                 .map(OrderDto::fromEntity)
                 .toList();
+    }
+
+    public OrderDto payBasket(User user) {
+        Order basket =  getBasket(user).orElseThrow(()-> new BasketEmptyException("Basket is empty") );
+        basket.recalculateDaysToDeliver();
+        basket.setStatus(OrderStatus.ORDERED);
+        basket.setOrderDate(LocalDateTime.now());
+        orderRepository.save(basket);
+        return OrderDto.fromEntity(basket);
     }
 }

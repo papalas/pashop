@@ -1,5 +1,6 @@
 package cz.mcity.pashop.controller;
 
+import cz.mcity.pashop.exception.BasketEmptyException;
 import cz.mcity.pashop.exception.ProductNotFoundException;
 import cz.mcity.pashop.model.User;
 import cz.mcity.pashop.service.CustomUserDetailsService;
@@ -29,7 +30,7 @@ public class OrderController {
     @PostMapping("/addItemToBasket")
     public ResponseEntity<String> addItemToBasket(@RequestBody BasketItemDto dto, Authentication auth) {
         try {
-            User user = userDetailsService.loadUserByName(auth.getName()).orElseThrow( () -> new UsernameNotFoundException("User not found"));
+            User user = userDetailsService.loadUserByName(auth.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             orderService.addItemToBasket(user, dto.productId(), dto.quantity());
             return ResponseEntity.ok("Item added to basket successfully");
         } catch (UsernameNotFoundException e) {
@@ -41,10 +42,11 @@ public class OrderController {
         }
 
     }
+
     @PostMapping("/removeItemFromBasket")
     public ResponseEntity<String> removeItemFromBasket(@RequestBody BasketItemDto dto, Authentication auth) {
         try {
-            User user = userDetailsService.loadUserByName(auth.getName()).orElseThrow( () -> new UsernameNotFoundException("User not found"));
+            User user = userDetailsService.loadUserByName(auth.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             orderService.removeItemFromBasket(user, dto.productId(), dto.quantity());
             return ResponseEntity.ok("Item removed from basket successfully");
         } catch (UsernameNotFoundException e) {
@@ -88,5 +90,20 @@ public class OrderController {
                     .build();
         }
 
+    }
+
+    @PostMapping("/payBasket")
+    public ResponseEntity<String> payBasket(Authentication auth) {
+        try {
+            User user = userDetailsService.loadUserByName(auth.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            OrderDto paidBasket = orderService.payBasket( user);
+            return ResponseEntity.ok(paidBasket.id().toString());
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } catch (BasketEmptyException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Empty or no basket for user");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
+        }
     }
 }
