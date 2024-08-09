@@ -1,27 +1,27 @@
+# Spuštění app:
+spring boot aplikace - maven, vytvořeno v intellij idea. spuštění mvnw spring-boot:run
+očekává lokálně docker
+postman kolekce na testování uložena v src/main/resources/static
+
 # DB
 Projekt používá postgresql db, očekává lokálně docker, přes docker-compose a spring-boot-docker-compose si startuje image, image má persistentní volume....
 DB je verzována via liquibase, chtěl jsem si to vyzkoušet....
 v tuto chvíli vůbec neřeším výkon, asi je tam jen primary key (identita)... počítání v eshopu by mohlo být pro hodně dat složitější, dalo by se naindexovat...
 
 Datainitializer
-CommandLineRunner - při spuštění app, naplnění usera když žádný není.
+CommandLineRunner - při spuštění app, naplnění 2 test uživatelů když žádný není. user/password, user2/password
 pokud nejsou v db produkty, 100 jich náhodně vyrobí....
-
--
 
 # vrstvy aplikace
 K datům přistupuji přes JPA -- mám data model
-    mám model    
-    mám interface (repository)
-    mám DTO
-
+    mám model + mám db interface (repository)
 mám service - kontroluje business logiku
-mám controller - mapuje http požadavky....
+mám controller - mapuje http požadavky....+ mám DTO
 
 # auth logika: 
 application.properties - user, password to empty
 CustomUserDetailsService -- třída pro ověření usera 
-SecurityConfig - řeší přístupy....
+SecurityConfig - řeší přístupy ke controllers....
 
 # Openapi
 přes springdoc-openapi-starter-webmvc-ui, přístup přes /api-docs a /swagger-ui.html, generování openapi.json v buildu... 
