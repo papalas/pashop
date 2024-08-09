@@ -5,11 +5,14 @@ import cz.mcity.pashop.exception.BasketEmptyException;
 import cz.mcity.pashop.exception.ProductNotFoundException;
 import cz.mcity.pashop.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -112,12 +115,38 @@ public class OrderService {
                 .toList();
     }
 
+    @Transactional
     public OrderDto payBasket(User user) {
         Order basket =  getBasket(user).orElseThrow(()-> new BasketEmptyException("Basket is empty") );
         basket.recalculateDaysToDeliver();
+
+        for (OrderItem orderItem : basket.getOrderItems()) {
+            Product product = orderItem.getProduct();
+            int orderedQuantity = orderItem.getQuantity();
+            int newStockQuantity = Math.max(0, product.getStockQuantity() - orderedQuantity);
+            product.setStockQuantity(newStockQuantity);
+            productRepository.save(product);
+        }
         basket.setStatus(OrderStatus.ORDERED);
         basket.setOrderDate(LocalDateTime.now());
         orderRepository.save(basket);
         return OrderDto.fromEntity(basket);
+    }
+
+    @Scheduled(cron = "0 * * * * *")
+    public void updateOrdersToDelivered() {
+        List<Order> orderedOrders = orderRepository.findByStatus(OrderStatus.ORDERED);
+        for (Order order : orderedOrders) {
+            if (order.getDaysToDeliver() == 0 && order.getDeliveryDate() == null) {
+                order.setStatus(OrderStatus.DELIVERED);
+                order.setDeliveryDate(LocalDateTime.now());
+                System.out.println("Order " + order.getId() + " has been delivered.");
+            } else {
+                order.setDaysToDeliver(order.getDaysToDeliver() - 1);
+                System.out.println("Order " + order.getId() + " has " + order.getDaysToDeliver() + " days left to deliver.");
+            }
+        }
+        orderRepository.saveAll(orderedOrders);
+
     }
 }

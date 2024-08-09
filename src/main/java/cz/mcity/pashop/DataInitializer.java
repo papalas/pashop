@@ -34,18 +34,25 @@ public class DataInitializer {
     public CommandLineRunner initializeData() {
         return args -> {
             if (userRepository.count() == 0) {
-                User user = new User();
-                user.setUsername("user");
-                user.setPasswordHash(passwordEncoder.encode("password"));
-                user.setEmail("test@mcity.cz");
-                userRepository.save(user);
-                System.out.println("Sample user created");
+                createUser("user");
+            }
+            if (userRepository.count() == 1) {
+                createUser("user2");
             }
 
             if (productsRepository.count() == 0) {
                 createMockProducts();
             }
         };
+    }
+
+    private void createUser(String username) {
+        User user = new User();
+        user.setUsername(username);
+        user.setPasswordHash(passwordEncoder.encode("password"));
+        user.setEmail(username+"+test@mcity.cz");
+        userRepository.save(user);
+        System.out.println("Sample user "+username+" created");
     }
 
     private void createMockProducts() {

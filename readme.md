@@ -55,12 +55,13 @@ zobrazuje košík, případně not found nebo 500...
 Zkouším si enum na orderstatus.
 vrací list, může být prázdné
 
-# TODOS::
-
-
 # API pay basket
-# retest listorders
-
+logika na počet zboží na skladě...
+přehodí objednávku do stavu ORDERED a nastaví datum objednávky.
 
 # background 1 minute task
+@EnableScheduling, @Scheduled cron
+logika projde objednávky ve stavu ordered, odečítá days to deliver a pokud o, dodá a nstaví delivery date.
+
+# TODOS::
 
