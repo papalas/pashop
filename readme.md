@@ -51,12 +51,16 @@ Logika pokud je víc produktů k remove než je v koši? Zatím maže
 Vyrobeny DTO, aby s tím šlo pracovat, nejsem si jist, jestli model překládat na dto v controlleru, nebo v service....  
 zobrazuje košík, případně not found nebo 500...
 
+# List orders
+Zkouším si enum na orderstatus.
+vrací list, může být prázdné
+
 # TODOS::
 
 
 # API pay basket
+# retest listorders
 
-# List orders
 
 # background 1 minute task
 

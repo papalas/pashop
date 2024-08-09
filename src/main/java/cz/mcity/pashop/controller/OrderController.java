@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -61,6 +62,23 @@ public class OrderController {
             User user = userDetailsService.loadUserByName(auth.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             Optional<OrderDto> basket = orderService.getBasketDto(user);
             return basket.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .header("X-Error-Message", e.toString())
+                    .build();
+        }
+
+    }
+
+    @GetMapping("/listOrders")
+    public ResponseEntity<List<OrderDto>> listOrders(Authentication auth) {
+        try {
+            User user = userDetailsService.loadUserByName(auth.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            List<OrderDto> orders = orderService.getOrders(user);
+            return ResponseEntity.ok(orders);
 
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

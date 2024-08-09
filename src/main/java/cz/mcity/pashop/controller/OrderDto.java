@@ -14,6 +14,7 @@ public record OrderDto(
         Long id,
         UserDto user,
         LocalDateTime orderDate,
+        LocalDateTime deliveryDate,
         BigDecimal totalAmount,
         String status,
         List<OrderItemDto> orderItems,
@@ -28,8 +29,9 @@ public record OrderDto(
         return new OrderDto(order.getId()
                 ,userDto,
                 order.getOrderDate(),
+                order.getDeliveryDate(),
                 order.getTotalAmount(),
-                order.getStatus(),
+                order.getStatus().toString(),
                 orderItemDtos,
                 order.getDaysToDeliver());
     }

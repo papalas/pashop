@@ -7,19 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class OrderService {
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
-    // private final OrderItemRepository orderItemRepository;
 
     @Autowired
     public OrderService(ProductRepository productRepository, OrderRepository orderRepository) {
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
-        // this.orderItemRepository = orderItemRepository;
     }
 
     @Transactional
@@ -59,7 +57,7 @@ public class OrderService {
     }
 
     private Optional<Order> getBasket(User user) {
-        return orderRepository.findByUserAndStatus(user, "BASKET");
+        return orderRepository.findByUserAndStatus(user, OrderStatus.BASKET);
     }
 
     public Optional<OrderDto> getBasketDto(User user) {
@@ -75,7 +73,7 @@ public class OrderService {
 
     private Order createNewBasket(User user) {
         Order order = new Order();
-        order.setStatus("BASKET");
+        order.setStatus(OrderStatus.BASKET);
         order.setUser(user);
         order.recalculateTotal();
         order.recalculateDaysToDeliver();
@@ -102,5 +100,13 @@ public class OrderService {
         return order.getOrderItems().stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst();
+    }
+
+    public List<OrderDto> getOrders(User user) {
+        List<OrderStatus> orderStatuses= Arrays.asList(OrderStatus.ORDERED, OrderStatus.DELIVERED);
+        return orderRepository.findByUserAndStatusIn(user,orderStatuses)
+                .stream()
+                .map(OrderDto::fromEntity)
+                .toList();
     }
 }
