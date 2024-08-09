@@ -41,15 +41,18 @@ Order_items- obsahuje list položek.
 # Api AddItemToBasket
 vše podle přihlášeného usera...najdu nebo vytvořím košík, potom v košíku najdu nebo vyrobím položku a přičtu objednávaný počet. přepočítám total položky a uložím
 ošetřená logika v try bloku, pokud nenajde usera nebo produkt, vrátí http chybu
+namapováno jako post operace, možná by bylo lepší jak put a delete
+note: Možná by bylo dobré, aby api na konci vracelo současný stav košíku? líp by se na FE pracovalo...
 
 # Api RemoveItemFromBasket
 Logika pokud je víc produktů k remove než je v koši? Zatím maže
 
-
+# Api ListBasket
+Vyrobeny DTO, aby s tím šlo pracovat, nejsem si jist, jestli model překládat na dto v controlleru, nebo v service....  
+zobrazuje košík, případně not found nebo 500...
 
 # TODOS::
 
-# Api ListBasket
 
 # API pay basket
 

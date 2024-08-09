@@ -56,5 +56,9 @@ public class OrderItem {
         return priceAtTime;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     // Getters and setters
 }

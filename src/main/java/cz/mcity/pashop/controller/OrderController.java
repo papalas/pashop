@@ -6,13 +6,12 @@ import cz.mcity.pashop.service.CustomUserDetailsService;
 import cz.mcity.pashop.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -27,7 +26,7 @@ public class OrderController {
     }
 
     @PostMapping("/addItemToBasket")
-    public ResponseEntity<String> addItemToBasket(@RequestBody OrderItemDTO dto, Authentication auth) {
+    public ResponseEntity<String> addItemToBasket(@RequestBody BasketItemDto dto, Authentication auth) {
         try {
             User user = userDetailsService.loadUserByName(auth.getName()).orElseThrow( () -> new UsernameNotFoundException("User not found"));
             orderService.addItemToBasket(user, dto.productId(), dto.quantity());
@@ -41,9 +40,8 @@ public class OrderController {
         }
 
     }
-
     @PostMapping("/removeItemFromBasket")
-    public ResponseEntity<String> removeItemFromBasket(@RequestBody OrderItemDTO dto, Authentication auth) {
+    public ResponseEntity<String> removeItemFromBasket(@RequestBody BasketItemDto dto, Authentication auth) {
         try {
             User user = userDetailsService.loadUserByName(auth.getName()).orElseThrow( () -> new UsernameNotFoundException("User not found"));
             orderService.removeItemFromBasket(user, dto.productId(), dto.quantity());
@@ -55,5 +53,22 @@ public class OrderController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
         }
+    }
+
+    @GetMapping("/listBasket")
+    public ResponseEntity<OrderDto> listBasket(Authentication auth) {
+        try {
+            User user = userDetailsService.loadUserByName(auth.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            Optional<OrderDto> basket = orderService.getBasketDto(user);
+            return basket.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .header("X-Error-Message", e.toString())
+                    .build();
+        }
+
     }
 }

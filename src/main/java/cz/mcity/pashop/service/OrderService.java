@@ -1,5 +1,6 @@
 package cz.mcity.pashop.service;
 
+import cz.mcity.pashop.controller.OrderDto;
 import cz.mcity.pashop.exception.ProductNotFoundException;
 import cz.mcity.pashop.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,13 @@ import java.util.Optional;
 public class OrderService {
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
+    // private final OrderItemRepository orderItemRepository;
 
     @Autowired
-    public OrderService(ProductRepository productRepository, OrderRepository orderRepository, OrderItemRepository orderItemRepository) {
+    public OrderService(ProductRepository productRepository, OrderRepository orderRepository) {
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
-        this.orderItemRepository = orderItemRepository;
+        // this.orderItemRepository = orderItemRepository;
     }
 
     @Transactional
@@ -36,8 +37,8 @@ public class OrderService {
 
     @Transactional
     public void removeItemFromBasket(User user, Long productId, int quantity) {
-        Order basket = getBasket(user).orElseThrow(() -> new RuntimeException("Basket not found for user"));;
-        OrderItem item = findOrderItem(basket, productId).orElseThrow(() -> new RuntimeException("Product " + productId +  " not found for user"));;;
+        Order basket = getBasket(user).orElseThrow(() -> new RuntimeException("Basket not found for user"));
+        OrderItem item = findOrderItem(basket, productId).orElseThrow(() -> new RuntimeException("Product " + productId +  " not found for user"));
 
         if (item.getQuantity() <= quantity) {
             basket.getOrderItems().remove(item);
@@ -59,6 +60,11 @@ public class OrderService {
 
     private Optional<Order> getBasket(User user) {
         return orderRepository.findByUserAndStatus(user, "BASKET");
+    }
+
+    public Optional<OrderDto> getBasketDto(User user) {
+        Optional<Order> basket = getBasket(user);
+        return basket.map(OrderDto::fromEntity);
     }
 
     private Product getProduct(Long productId) {
@@ -93,23 +99,8 @@ public class OrderService {
     }
 
     private Optional<OrderItem> findOrderItem(Order order, Long productId) {
-//        return order.getOrderItems().stream()
-//                .filter(item -> item.getProduct().getId().equals(productId))
-//                .findFirst();
-        System.out.println("Searching for product ID: " + productId);
-        System.out.println("Number of order items: " + order.getOrderItems().size());
-
         return order.getOrderItems().stream()
-                .peek(item -> System.out.println("Checking item with product ID: " + item.getProduct().getId()))
-                .filter(item -> {
-                    boolean matches = item.getProduct().getId() == productId;
-                    System.out.println("Product ID " + item.getProduct().getId() + " matches: " + matches);
-                    return matches;
-                })
+                .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst();
     }
-
-
-
-
 }

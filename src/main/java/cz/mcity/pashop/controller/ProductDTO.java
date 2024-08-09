@@ -10,8 +10,14 @@ import java.math.BigDecimal;
  * DTO for {@link Product}
  */
 @Schema(description = "Product Data Transfer Object")
-public record ProductDTO(Long id, String name, String description, BigDecimal price, Integer stockQuantity,
-                        Integer deliveryDays) implements Serializable {
+public record ProductDTO(
+        Long id,
+        String name,
+        String description,
+        BigDecimal price,
+        Integer stockQuantity,
+        Integer deliveryDays
+) implements Serializable {
 
     @Override
     public String toString() {

@@ -54,5 +54,9 @@ public class User {
         return createdAt;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     // Getters and setters
 }

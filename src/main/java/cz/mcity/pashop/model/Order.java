@@ -93,6 +93,14 @@ public class Order {
                 .orElse(0);
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
 
     // Getters and setters
 }

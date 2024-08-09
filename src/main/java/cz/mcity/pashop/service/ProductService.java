@@ -6,12 +6,11 @@ import cz.mcity.pashop.model.Product;
 import cz.mcity.pashop.model.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -40,7 +39,7 @@ public class ProductService {
 
         List<ProductDTO> productDTOs = productPage.getContent().stream()
                 .map(ProductDTO::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
 
         return new PageDTO<>(
                 productDTOs,
